@@ -20,18 +20,20 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-mode = os.getenv("MODE")
 debug = os.getenv("DEBUG")
 if debug == "TRUE":
     DEBUG = True
 elif debug == "FALSE":
     DEBUG = False
+else:
+    DEBUG = False  # За замовчуванням
 
-if mode == "LOCAL":
+if DEBUG:
     ALLOWED_HOSTS = ["*"]
-elif mode == "PRODUCTION":
+else:
     hosts = os.getenv("ALLOWED_HOSTS", "")
     if not hosts:
         raise ValueError("ALLOWED_HOSTS must be set in production!")
