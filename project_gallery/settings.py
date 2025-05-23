@@ -11,22 +11,32 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3)rjgz!)8hpqk#-3gua@da_qdvgg=t^#t)ftx-9v4n+@id#ca('
+mode = os.getenv("MODE")
+debug = os.getenv("DEBUG")
+if debug == "TRUE":
+    DEBUG = True
+elif debug == "FALSE":
+    DEBUG = False
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if mode == "LOCAL":
+    ALLOWED_HOSTS = ["*"]
+elif mode == "PRODUCTION":
+    hosts = os.getenv("ALLOWED_HOSTS", "")
+    if not hosts:
+        raise ValueError("ALLOWED_HOSTS must be set in production!")
+    ALLOWED_HOSTS = hosts.split(",")
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
