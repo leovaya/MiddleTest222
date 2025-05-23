@@ -1,0 +1,1 @@
+web: gunicorn project_gallery.wcgi --log-file - log-level debug
